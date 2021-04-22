@@ -16,6 +16,8 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static spark.Spark.*;
 
@@ -83,13 +85,17 @@ public class SpotifyWebClientAuthServer {
                     Collections.emptyList()
             ).complete();
 
-            for(int i = 0; i < recommendationResponse.getTracks().size(); i++){
-                api.getPlaylists().addTracksToClientPlaylistRestAction(
-                        playlistToAddTo.getId(),
-                        new String[] { recommendationResponse.getTracks().get(i).getId() },
-                        null
-                ).complete();
-            }
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+            executor.execute(new MultiThread(api, 0, 4, recommendationResponse,playlistToAddTo));
+            executor.execute(new MultiThread(api, 5, 10, recommendationResponse,playlistToAddTo));
+            executor.shutdown();
+//            for(int i = 0; i < recommendationResponse.getTracks().size(); i++){
+//                api.getPlaylists().addTracksToClientPlaylistRestAction(
+//                        playlistToAddTo.getId(),
+//                        new String[] { recommendationResponse.getTracks().get(i).getId() },
+//                        null
+//                ).complete();
+//            }
 
           /*  api.getPlaylists().addTracksToClientPlaylistRestAction(
                     playlistToAddTo.getId(),
@@ -149,5 +155,33 @@ public class SpotifyWebClientAuthServer {
         request.session().removeAttribute("api");
         response.redirect("/");
         return null;
+    }
+
+
+}
+
+class MultiThread extends Thread {
+    private final SpotifyClientApi api;
+    private int startIndex;
+    private int endIndex;
+    private RecommendationResponse recommendationResponse;
+    private SimplePlaylist playlistToAddTo;
+
+    public MultiThread(SpotifyClientApi api, int startIndex, int endIndex, RecommendationResponse recommendationResponse, SimplePlaylist playlistToAddTo) {
+        this.api = api;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+        this.recommendationResponse = recommendationResponse;
+        this.playlistToAddTo = playlistToAddTo;
+    }
+
+    public void run() {
+        for (int i = startIndex; i <= endIndex; i++) {
+            api.getPlaylists().addTracksToClientPlaylistRestAction(
+                    playlistToAddTo.getId(),
+                    new String[]{recommendationResponse.getTracks().get(i).getId()},
+                    null
+            ).complete();
+        }
     }
 }
