@@ -100,11 +100,6 @@ public class SpotifyWebClientAuthServer {
 //                ).complete();
 //            }
 
-          /*  api.getPlaylists().addTracksToClientPlaylistRestAction(
-                    playlistToAddTo.getId(),
-                    new String[] { recommendationResponse.getTracks().get(0).getId() },
-                    null
-            ).complete();*/
             model.put("success", true);
             model.put("playlist", playlistToAddTo);
             model.put("iframe","https://open.spotify.com/embed/playlist/"+playlistToAddTo.getId());
