@@ -87,7 +87,7 @@ public class SpotifyWebClientAuthServer {
 
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.execute(new MultiThread(api, 0, 4, recommendationResponse,playlistToAddTo));
-            executor.execute(new MultiThread(api, 5, 10, recommendationResponse,playlistToAddTo));
+            executor.execute(new MultiThread(api, 5, 9, recommendationResponse,playlistToAddTo));
             executor.shutdown();
 //            for(int i = 0; i < recommendationResponse.getTracks().size(); i++){
 //                api.getPlaylists().addTracksToClientPlaylistRestAction(
