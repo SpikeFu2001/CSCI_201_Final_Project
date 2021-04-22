@@ -89,6 +89,9 @@ public class SpotifyWebClientAuthServer {
             executor.execute(new MultiThread(api, 0, 4, recommendationResponse,playlistToAddTo));
             executor.execute(new MultiThread(api, 5, 9, recommendationResponse,playlistToAddTo));
             executor.shutdown();
+            while(!executor.isTerminated()){
+                Thread.yield();
+            }
 //            for(int i = 0; i < recommendationResponse.getTracks().size(); i++){
 //                api.getPlaylists().addTracksToClientPlaylistRestAction(
 //                        playlistToAddTo.getId(),
