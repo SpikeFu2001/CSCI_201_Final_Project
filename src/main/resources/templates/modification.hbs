@@ -1,6 +1,9 @@
 <html>
 
 <head>
+<meta http-Equiv="Cache-Control" Content="no-cache" />
+    <meta http-Equiv="Pragma" Content="no-cache" />
+    <meta http-Equiv="Expires" Content="0" />
 </head>
 
 <body class="bg-image" style="
@@ -10,6 +13,7 @@
            background-attachment: fixed;
            background-position: center;
          ">
+
   <div class="text-center">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <a class="navbar-brand" href="#">
@@ -27,7 +31,7 @@
       <p class="text-center">Successfully added 10 songs to your playlist! Go <a href="/">back</a>.</p>
     </div>
     <form action="/submit-playlist-for-modifications" method="get">
-      <iframe src={iframe} width="700" height="480" style="border: 15px dotted white;" allowtransparency="true"
+      <iframe src={{iframe}} width="700" height="480" style="border: 15px dotted white;" allowtransparency="true"
         allow="encrypted-media"></iframe>
     </form>
     {{else}}
